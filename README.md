@@ -45,7 +45,7 @@ agent-memory-caching/
 
 ## Concepte implementate
 
-### Partea 1 — Conversation Memory (L8)
+### Partea 1 — Conversation Memory
 LLM-ul e **stateless**: fiecare apel e independent, deci memoria o gestionăm noi,
 în cod. Ținem fiecare tur (user + assistant) în tabelul `chat_messages`, grupat pe
 `session_id`. La fiecare rulare, `ConversationMemory.load_history()` reconstruiește
@@ -54,7 +54,7 @@ Asta e „long-term memory = PostgreSQL" din analogia memoriei umane. Integrarea
 face în `langchain_agent.py`: istoricul se adaugă în lista de `messages` înainte de
 `invoke`.
 
-### Partea 2 — Prompt Caching (L8)
+### Partea 2 — Prompt Caching
 Cu `cache_control: {"type": "ephemeral"}` pe blocul de context fix (system prompt +
 documentul), Anthropic cachează tot prefixul. Primul apel **scrie** cache-ul; apelurile
 următoare cu același prefix îl **citesc** (tokenii cache-uiți costă ~10% și vin mai
@@ -62,7 +62,7 @@ repede). Se folosește `ChatAnthropic` direct (nu LiteLLM), fiindcă `cache_cont
 funcție Anthropic. Măsurarea se face din `usage_metadata["input_token_details"]`
 (`cache_read`, `ephemeral_5m_input_tokens`).
 
-### Partea 3 — Intent Classifier (L7)
+### Partea 3 — Intent Classifier
 Regula de aur: dacă output-ul e **predictibil și finit** (3 clase), nu ai nevoie de LLM.
 Antrenăm un `Pipeline(TF-IDF → LogisticRegression)` care clasifică **intenția întrebării**
 (nu conținutul documentului): search / extract / summarize. TF-IDF combină n-grame de
