@@ -2,7 +2,7 @@
 
 Optimizarea agentului **Document Analyst**: îi adăugăm memorie de
 conversație, prompt caching și un clasificator de intenție clasic — ca să fie
-mai ieftin, mai rapid și cu context persistent, pe principiul din curs:
+mai ieftin, mai rapid și cu context persistent, pe principiul:
 *„nu folosi LLM unde un mecanism determinist e suficient"*.
 
 ## Ce face
